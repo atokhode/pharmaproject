@@ -3,11 +3,10 @@ package com.web.pharmacy;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @SpringBootApplication
@@ -21,8 +20,9 @@ public class PharmacyApplication {
 
 interface DrugDataRepository extends CrudRepository<DrugData, String>{}
 
+
 @RestController
-@RequestMapping("/")
+@RequestMapping("/drug")
 class DrugDataApiRestController{
 	private final DrugDataRepository drugDataRepository;
 
@@ -38,5 +38,15 @@ class DrugDataApiRestController{
 	@GetMapping
 	Iterable<DrugData> getAllDrugData(){
 		return drugDataRepository.findAll();
+	}
+
+	@GetMapping("/{id}")
+	Optional<DrugData> getDrugById(@PathVariable String id){
+		return drugDataRepository.findById(id);
+	}
+
+	@PostMapping
+	DrugData postDrugData(@RequestBody DrugData drugData){
+		return drugDataRepository.save(drugData);
 	}
 }
